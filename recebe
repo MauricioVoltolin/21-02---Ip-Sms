@@ -1,0 +1,32 @@
+import socket
+
+# Endereço IP e Porta para receber mensagens
+receiver_ip = '0.0.0.0'  # Aceita conexões de qualquer IP
+receiver_port = 12345  # Escolha uma porta disponível
+
+# Criação do socket
+receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Vincula o socket ao endereço e à porta
+receiver_socket.bind((receiver_ip, receiver_port))
+
+# Aguarda por conexões
+receiver_socket.listen()
+
+print(f"Aguardando conexão em {receiver_ip}:{receiver_port}")
+
+# Aceita a conexão quando recebida
+connection, address = receiver_socket.accept()
+print(f"Conectado a {address}")
+
+while True:
+    # Recebe a mensagem
+    received_message = connection.recv(1024).decode()
+    print(f"Mensagem recebida: {received_message}")
+
+    if received_message.lower() == 'exit':
+        break
+
+# Fecha a conexão e o socket
+connection.close()
+receiver_socket.close()
