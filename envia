@@ -1,0 +1,64 @@
+envia
+
+import socket
+
+# Endereço IP e Porta da máquina receptora
+receiver_ip = '192.168.1.2'  # Substitua pelo IP da máquina receptora
+receiver_port = 12345  # Substitua pela porta desejada
+
+# Criação do socket
+sender_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Conecta ao endereço do receptor
+sender_socket.connect((receiver_ip, receiver_port))
+
+while True:
+    # Envia mensagem para o receptor
+    message = input("Digite a mensagem para enviar (ou 'exit' para sair): ")
+    sender_socket.send(message.encode())
+
+    if message.lower() == 'exit':
+        break
+
+# Fecha o socket
+sender_socket.close()
+
+
+
+
+
+
+recebe:
+
+import socket
+
+# Endereço IP e Porta para receber mensagens
+receiver_ip = '0.0.0.0'  # Aceita conexões de qualquer IP
+receiver_port = 12345  # Escolha uma porta disponível
+
+# Criação do socket
+receiver_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+# Vincula o socket ao endereço e à porta
+receiver_socket.bind((receiver_ip, receiver_port))
+
+# Aguarda por conexões
+receiver_socket.listen()
+
+print(f"Aguardando conexão em {receiver_ip}:{receiver_port}")
+
+# Aceita a conexão quando recebida
+connection, address = receiver_socket.accept()
+print(f"Conectado a {address}")
+
+while True:
+    # Recebe a mensagem
+    received_message = connection.recv(1024).decode()
+    print(f"Mensagem recebida: {received_message}")
+
+    if received_message.lower() == 'exit':
+        break
+
+# Fecha a conexão e o socket
+connection.close()
+receiver_socket.close()
